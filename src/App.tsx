@@ -269,7 +269,11 @@ export function App() {
           )}
 
           {currentPage === 'lessons' && selectedNode && (
-            <LessonView node={selectedNode} onCompleteLesson={handleCompleteLesson} />
+            <LessonView
+              node={selectedNode}
+              onCompleteLesson={handleCompleteLesson}
+              onOpenAiTutor={() => setIsAiTutorOpen(true)}
+            />
           )}
 
           {currentPage === 'tickets' && <TicketsView />}
