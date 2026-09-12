@@ -8,6 +8,7 @@ import { AITutorDrawer } from './components/AITutorDrawer';
 import { ToolboxView } from './components/ToolboxView';
 import { SkillTreeView } from './components/SkillTreeView';
 import { AchievementsView } from './components/AchievementsView';
+import { WindowsVsLinuxView } from './components/WindowsVsLinuxView';
 import { LessonNode, UserProgress } from './types';
 import { Settings, Flame, Shield } from 'lucide-react';
 
@@ -282,6 +283,8 @@ export function App() {
           {currentPage === 'tickets' && <TicketsView />}
 
           {currentPage === 'toolbox' && <ToolboxView />}
+
+          {currentPage === 'windows-vs-linux' && <WindowsVsLinuxView />}
 
           {currentPage === 'skill-tree' && <SkillTreeView />}
 

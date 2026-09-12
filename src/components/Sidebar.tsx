@@ -13,6 +13,7 @@ import {
   Sparkles,
   ChevronRight,
   ShieldAlert,
+  ArrowLeftRight,
 } from 'lucide-react';
 
 export type NavPage =
@@ -21,6 +22,7 @@ export type NavPage =
   | 'lessons'
   | 'tickets'
   | 'toolbox'
+  | 'windows-vs-linux'
   | 'skill-tree'
   | 'achievements'
   | 'settings';
@@ -58,6 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         { id: 'tickets' as NavPage, label: 'Chamados (Tickets)', icon: Inbox, badge: 'Novo' },
         { id: 'toolbox' as NavPage, label: 'Arsenal Kali', icon: Wrench, badge: null },
+        { id: 'windows-vs-linux' as NavPage, label: 'Windows vs Linux', icon: ArrowLeftRight, badge: 'Guia' },
       ],
     },
     {
