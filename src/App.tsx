@@ -5,8 +5,11 @@ import { LessonView } from './components/LessonView';
 import { TicketsView } from './components/TicketsView';
 import { DashboardView } from './components/DashboardView';
 import { AITutorDrawer } from './components/AITutorDrawer';
+import { ToolboxView } from './components/ToolboxView';
+import { SkillTreeView } from './components/SkillTreeView';
+import { AchievementsView } from './components/AchievementsView';
 import { LessonNode, UserProgress } from './types';
-import { Wrench, Layers, Award, Settings, Flame, Shield } from 'lucide-react';
+import { Settings, Flame, Shield } from 'lucide-react';
 
 const INITIAL_NODES: LessonNode[] = [
   {
@@ -278,36 +281,11 @@ export function App() {
 
           {currentPage === 'tickets' && <TicketsView />}
 
-          {/* Telas Planejadas */}
-          {currentPage === 'toolbox' && (
-            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
-              <Wrench className="w-12 h-12 text-tertiary-indigo mx-auto" />
-              <h2 className="font-display font-bold text-xl">Arsenal de Ferramentas Kali</h2>
-              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
-                Enciclopédia interativa (Nmap, Wireshark, Metasploit, John). As ferramentas são desbloqueadas conforme sua evolução nos fundamentos.
-              </p>
-            </div>
-          )}
+          {currentPage === 'toolbox' && <ToolboxView />}
 
-          {currentPage === 'skill-tree' && (
-            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
-              <Layers className="w-12 h-12 text-primary-electric mx-auto" />
-              <h2 className="font-display font-bold text-xl">Árvore de Habilidades & Seleção de Team</h2>
-              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
-                Você está no nível inicial de fundamentos como <strong>{userTeam}</strong>. Conclua os módulos para escolher sua especialização (Red Team, Blue Team, SOC, Pentester...).
-              </p>
-            </div>
-          )}
+          {currentPage === 'skill-tree' && <SkillTreeView />}
 
-          {currentPage === 'achievements' && (
-            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
-              <Award className="w-12 h-12 text-secondary-emerald mx-auto" />
-              <h2 className="font-display font-bold text-xl">Quadro de Medalhas e Conquistas</h2>
-              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
-                Badges obtidas por marcos alcançados: Mestre do Chmod, Primeiro Nmap, Chamados Resolvidos.
-              </p>
-            </div>
-          )}
+          {currentPage === 'achievements' && <AchievementsView />}
 
           {currentPage === 'settings' && (
             <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
