@@ -1,54 +1,37 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/dev/tooling/cli/schema.json",
   "build": {
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
-    "devPath": "http://localhost:5173",
-    "distDir": "../dist"
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "RootPath",
-    "version": "0.1.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": true
-    },
-    "bundle": {
-      "active": true,
-      "category": "Education",
-      "copyright": "",
+  "bundle": {
+    "active": true,
+    "category": "Education",
+    "copyright": "",
+    "externalBin": [],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "linux": {
       "deb": {
         "depends": []
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/icon.png"
-      ],
-      "identifier": "com.rootpath.app",
-      "longDescription": "RootPath - Plataforma progressiva e gamificada para aprender Linux e Kali Linux.",
-      "macOS": {
-        "frameworks": [],
-        "minimumSystemVersion": "",
-        "exceptionDomain": "",
-        "signingIdentity": null,
-        "entitlements": null
-      },
-      "resources": [],
-      "shortDescription": "Aprenda Linux e Kali Linux com RootPath",
-      "targets": ["deb", "appimage"],
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
       }
     },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": false
-    },
+    "longDescription": "RootPath - Plataforma progressiva e gamificada para aprender Linux e Kali Linux.",
+    "resources": [],
+    "shortDescription": "Aprenda Linux e Kali Linux com RootPath",
+    "targets": ["deb", "appimage"]
+  },
+  "identifier": "com.rootpath.app",
+  "productName": "RootPath",
+  "version": "0.1.0",
+  "app": {
     "windows": [
       {
         "fullscreen": false,
@@ -57,6 +40,9 @@
         "title": "RootPath - SANDBOX // ENV",
         "width": 1360
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
   }
 }
