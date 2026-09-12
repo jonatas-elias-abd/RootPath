@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { Sidebar, NavPage } from './components/Sidebar';
 import { LearningTree } from './components/LearningTree';
 import { LessonView } from './components/LessonView';
-import { AITutorPanel } from './components/AITutorPanel';
-import { RootPathLogo } from './components/RootPathLogo';
+import { TicketsView } from './components/TicketsView';
+import { DashboardView } from './components/DashboardView';
+import { AITutorDrawer } from './components/AITutorDrawer';
 import { LessonNode, UserProgress } from './types';
-import { Shield, Award, BookOpen, Flame } from 'lucide-react';
+import { Wrench, Layers, Award, Settings, Flame, Shield } from 'lucide-react';
 
 const INITIAL_NODES: LessonNode[] = [
   {
@@ -81,7 +83,7 @@ const INITIAL_NODES: LessonNode[] = [
     xp_reward: 120,
     estimated_minutes: 8,
     content: {
-      concept_explanation: 'No terminal, você envia instruções curtas e diretas. O comando `whoami` responde exatamente com o nome do seu usuário atual. O comando `hostname` exibe a identificação da sua máquina na rede.',
+      concept_explanation: 'No terminal, você envia instruções curtas e diretas. O comando `whoami` responde com o nome do seu usuário atual. O comando `hostname` exibe a identificação da sua máquina na rede.',
       demonstration: 'user@kali:~$ whoami\nkali',
       exercises: [
         {
@@ -159,16 +161,20 @@ const INITIAL_NODES: LessonNode[] = [
 ];
 
 export function App() {
+  const [currentPage, setCurrentPage] = useState<NavPage>('dashboard');
+  const [isAiTutorOpen, setIsAiTutorOpen] = useState<boolean>(false);
   const [nodes, setNodes] = useState<LessonNode[]>(INITIAL_NODES);
   const [selectedNode, setSelectedNode] = useState<LessonNode | undefined>(INITIAL_NODES[0]);
   const [progress, setProgress] = useState<UserProgress>({
     user_id: 'iniciante_rootpath',
-    total_xp: 0,
+    total_xp: 150,
     completed_node_ids: [],
     current_node_id: 'L1.1',
     last_active_timestamp: Date.now(),
   });
-  const [streakDays, setStreakDays] = useState<number>(1);
+  const [streakDays] = useState<number>(3);
+  const [userTeam] = useState<string>('Novato (Indefinido)');
+  const [userRank] = useState<string>('Script Kiddie I');
 
   const handleCompleteLesson = (completedId: string) => {
     setNodes((prevNodes) =>
@@ -201,63 +207,122 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-on-surface flex flex-col font-sans">
-      {/* Top Header / App Spine */}
-      <header className="h-16 border-b border-outline-subtle bg-layer1/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-50">
-        <div className="flex items-center gap-4">
-          <RootPathLogo size="md" />
-        </div>
+    <div className="min-h-screen bg-canvas text-on-surface flex font-sans antialiased overflow-x-hidden">
+      {/* 1. Barra Lateral Fixa Agrupada (Opção 2) */}
+      <Sidebar
+        currentPage={currentPage}
+        onNavigate={(page) => setCurrentPage(page)}
+        onToggleAiTutor={() => setIsAiTutorOpen((prev) => !prev)}
+        isAiTutorOpen={isAiTutorOpen}
+        userTeam={userTeam}
+        userRank={userRank}
+        totalXp={progress.total_xp}
+      />
 
-        {/* User XP, Streak & Stats (Gamificação) */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-layer2 px-3.5 py-1.5 rounded-full border border-outline-subtle text-xs font-mono">
-            <Flame className="w-4 h-4 text-orange-400" />
-            <span className="text-on-surface-variant">Ofensiva:</span>
-            <span className="font-bold text-orange-400">{streakDays} dia(s)</span>
+      {/* 2. Área Central de Conteúdo Principal */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top Header com Status Rápidos e Ofensiva */}
+        <header className="h-14 border-b border-outline-subtle bg-layer1/60 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
+          <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant">
+            <span>RootPath</span>
+            <span>/</span>
+            <span className="text-primary-electric capitalize">{currentPage.replace('-', ' ')}</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-layer2 px-3.5 py-1.5 rounded-full border border-outline-subtle text-xs font-mono">
-            <Award className="w-4 h-4 text-secondary-emerald" />
-            <span className="text-on-surface-variant">XP Total:</span>
-            <span className="font-bold text-secondary-emerald">{progress.total_xp}</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 bg-layer2 px-3 py-1 rounded-full border border-outline-subtle text-xs font-mono">
+              <Flame className="w-3.5 h-3.5 text-orange-400" />
+              <span className="font-bold text-orange-400">{streakDays} Dias</span>
+            </div>
+
+            <div className="flex items-center gap-2 bg-layer2 px-3 py-1 rounded-full border border-outline-subtle text-xs font-mono">
+              <Shield className="w-3.5 h-3.5 text-primary-electric" />
+              <span className="font-bold text-secondary-emerald">{progress.total_xp} XP</span>
+            </div>
           </div>
+        </header>
 
-          <div className="flex items-center gap-2 bg-layer2 px-3.5 py-1.5 rounded-full border border-outline-subtle text-xs font-mono">
-            <Shield className="w-4 h-4 text-tertiary-indigo" />
-            <span className="text-on-surface-variant">Lições Concluídas:</span>
-            <span className="font-bold text-tertiary-indigo">{progress.completed_node_ids.length}</span>
-          </div>
-        </div>
-      </header>
+        {/* View Router */}
+        <main className="flex-1 p-6 overflow-y-auto">
+          {currentPage === 'dashboard' && (
+            <DashboardView
+              onNavigate={(page) => setCurrentPage(page)}
+              totalXp={progress.total_xp}
+              streakDays={streakDays}
+              completedLessonsCount={progress.completed_node_ids.length}
+              userRank={userRank}
+              userTeam={userTeam}
+            />
+          )}
 
-      {/* Main 3-Column Desktop Layout */}
-      <main className="flex-1 p-6 grid grid-cols-12 gap-6 max-w-[1600px] mx-auto w-full">
-        <section className="col-span-4 flex flex-col gap-4">
-          <LearningTree
-            nodes={nodes}
-            onSelectNode={(node) => setSelectedNode(node)}
-            selectedNodeId={selectedNode?.id}
-          />
-        </section>
+          {currentPage === 'learning-tree' && (
+            <div className="max-w-4xl mx-auto">
+              <LearningTree
+                nodes={nodes}
+                onSelectNode={(node) => {
+                  setSelectedNode(node);
+                  setCurrentPage('lessons');
+                }}
+                selectedNodeId={selectedNode?.id}
+              />
+            </div>
+          )}
 
-        <section className="col-span-5 flex flex-col gap-4">
-          {selectedNode ? (
+          {currentPage === 'lessons' && selectedNode && (
             <LessonView node={selectedNode} onCompleteLesson={handleCompleteLesson} />
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-layer1 rounded-2xl border border-outline-subtle">
-              <BookOpen className="w-12 h-12 text-outline mb-3" />
-              <h3 className="font-display font-semibold text-lg">Selecione uma Lição</h3>
-              <p className="text-xs text-on-surface-variant mt-1">
-                Escolha um nó disponível no mapa da árvore à esquerda para iniciar.
+          )}
+
+          {currentPage === 'tickets' && <TicketsView />}
+
+          {/* Telas Planejadas */}
+          {currentPage === 'toolbox' && (
+            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
+              <Wrench className="w-12 h-12 text-tertiary-indigo mx-auto" />
+              <h2 className="font-display font-bold text-xl">Arsenal de Ferramentas Kali</h2>
+              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
+                Enciclopédia interativa (Nmap, Wireshark, Metasploit, John). As ferramentas são desbloqueadas conforme sua evolução nos fundamentos.
               </p>
             </div>
           )}
-        </section>
 
-        <section className="col-span-3 flex flex-col gap-4 h-[calc(100vh-7rem)] sticky top-20">
-          <AITutorPanel currentLessonTitle={selectedNode?.title} />
-        </section>
-      </main>
+          {currentPage === 'skill-tree' && (
+            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
+              <Layers className="w-12 h-12 text-primary-electric mx-auto" />
+              <h2 className="font-display font-bold text-xl">Árvore de Habilidades & Seleção de Team</h2>
+              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
+                Você está no nível inicial de fundamentos como <strong>{userTeam}</strong>. Conclua os módulos para escolher sua especialização (Red Team, Blue Team, SOC, Pentester...).
+              </p>
+            </div>
+          )}
+
+          {currentPage === 'achievements' && (
+            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
+              <Award className="w-12 h-12 text-secondary-emerald mx-auto" />
+              <h2 className="font-display font-bold text-xl">Quadro de Medalhas e Conquistas</h2>
+              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
+                Badges obtidas por marcos alcançados: Mestre do Chmod, Primeiro Nmap, Chamados Resolvidos.
+              </p>
+            </div>
+          )}
+
+          {currentPage === 'settings' && (
+            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
+              <Settings className="w-12 h-12 text-outline mx-auto" />
+              <h2 className="font-display font-bold text-xl">Configurações & Auditoria</h2>
+              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
+                Preferências de terminal, histórico do Tutor IA Qwen3 0.6B e registro de comandos perigosos interceptados pelo sistema.
+              </p>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* 3. Gaveta Retrátil do Tutor IA (abre sem poluir a tela) */}
+      <AITutorDrawer
+        isOpen={isAiTutorOpen}
+        onClose={() => setIsAiTutorOpen(false)}
+        currentLessonTitle={selectedNode?.title}
+      />
     </div>
   );
 }
