@@ -9,8 +9,13 @@ import { ToolboxView } from './components/ToolboxView';
 import { SkillTreeView } from './components/SkillTreeView';
 import { AchievementsView } from './components/AchievementsView';
 import { WindowsVsLinuxView } from './components/WindowsVsLinuxView';
+import { ErrorReviewView } from './components/ErrorReviewView';
+import { NetworkTopologyView } from './components/NetworkTopologyView';
+import { GlossaryView } from './components/GlossaryView';
+import { NotesView } from './components/NotesView';
+import { SettingsView } from './components/SettingsView';
 import { LessonNode, UserProgress } from './types';
-import { Settings, Flame, Shield } from 'lucide-react';
+import { Flame, Shield } from 'lucide-react';
 
 const INITIAL_NODES: LessonNode[] = [
   {
@@ -286,19 +291,19 @@ export function App() {
 
           {currentPage === 'windows-vs-linux' && <WindowsVsLinuxView />}
 
+          {currentPage === 'error-review' && <ErrorReviewView />}
+
+          {currentPage === 'glossary' && <GlossaryView />}
+
+          {currentPage === 'notes' && <NotesView />}
+
+          {currentPage === 'network-topology' && <NetworkTopologyView />}
+
           {currentPage === 'skill-tree' && <SkillTreeView />}
 
           {currentPage === 'achievements' && <AchievementsView />}
 
-          {currentPage === 'settings' && (
-            <div className="p-8 bg-layer1 rounded-2xl border border-outline-subtle max-w-4xl mx-auto text-center space-y-3">
-              <Settings className="w-12 h-12 text-outline mx-auto" />
-              <h2 className="font-display font-bold text-xl">Configurações & Auditoria</h2>
-              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
-                Preferências de terminal, histórico do Tutor IA Qwen3 0.6B e registro de comandos perigosos interceptados pelo sistema.
-              </p>
-            </div>
-          )}
+          {currentPage === 'settings' && <SettingsView />}
         </main>
       </div>
 

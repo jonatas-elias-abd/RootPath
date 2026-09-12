@@ -12,8 +12,9 @@ import {
   Settings,
   Sparkles,
   ChevronRight,
-  ShieldAlert,
   ArrowLeftRight,
+  RotateCcw,
+  Network,
 } from 'lucide-react';
 
 export type NavPage =
@@ -23,6 +24,10 @@ export type NavPage =
   | 'tickets'
   | 'toolbox'
   | 'windows-vs-linux'
+  | 'error-review'
+  | 'glossary'
+  | 'notes'
+  | 'network-topology'
   | 'skill-tree'
   | 'achievements'
   | 'settings';
@@ -60,7 +65,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         { id: 'tickets' as NavPage, label: 'Chamados (Tickets)', icon: Inbox, badge: 'Novo' },
         { id: 'toolbox' as NavPage, label: 'Arsenal Kali', icon: Wrench, badge: null },
+        { id: 'network-topology' as NavPage, label: 'Topologia de Redes', icon: Network, badge: null },
+      ],
+    },
+    {
+      group: 'DIDÁTICA & REVISÃO',
+      items: [
         { id: 'windows-vs-linux' as NavPage, label: 'Windows vs Linux', icon: ArrowLeftRight, badge: 'Guia' },
+        { id: 'error-review' as NavPage, label: 'Caderno de Erros', icon: RotateCcw, badge: null },
+        { id: 'glossary' as NavPage, label: 'Dicionário Linux', icon: BookOpen, badge: null },
+        { id: 'notes' as NavPage, label: 'Anotações', icon: Layers, badge: null },
       ],
     },
     {
