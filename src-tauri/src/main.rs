@@ -46,6 +46,13 @@ fn check_security_command(command: String, state: State<AppState>) -> Option<Str
 }
 
 fn main() {
+    // Corrige artefatos visuais / listras na tela em máquinas virtuais Linux / WebKitGTK (DMA-BUF compositing bug)
+    #[cfg(target_os = "linux")]
+    {
+        std::env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
+        std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+    }
+
     let storage_path = dirs_next().join("user_progress.json");
     let persistence = PersistenceManager::new(storage_path);
     let initial_progress = persistence.load_progress();
